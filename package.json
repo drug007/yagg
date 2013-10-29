@@ -1,0 +1,20 @@
+{
+  "name": "gui",
+  "targetType": "executable",
+  "description": "test of yet another OpenGL GUI",
+  "authors": ["Alexander Druzhinin  "],
+  "homepage": "",
+  "license": "boost",
+  "targetName": "gui",
+  "sourcePaths": ["src"],
+  "importPaths": ["src"],
+  "libs": [
+    "cairo"
+  ],
+  "dependencies": {
+    "derelict": "~master",
+    "glamour": "~master",
+    "gl3n": "~master",
+    "cairod": "~dub_package",
+  }
+}
