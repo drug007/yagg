@@ -18,14 +18,10 @@ import yagg.backend.cairo.backend: Backend;
 
 class Button: Widget
 {
-    Placeholder placeholder;
     VAO vao;
     Buffer vertices;
     Buffer texcoords;
     Texture2D texture;
-
-    alias void delegate() OnClickHandler;
-    OnClickHandler onClick;
 
     string caption;
 
@@ -62,6 +58,7 @@ class Button: Widget
 
     void build()
     {
+        close();
         texture = new Texture2D();
 
         auto width = (GUI.width*placeholder.width).to!int;

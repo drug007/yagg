@@ -1,11 +1,14 @@
 module yagg.gui;
 
 import std.exception: enforce;
+import std.stdio;
 
 import derelict.opengl3.gl3: GLint, glUniformMatrix4fv, GL_TRUE;
 import glamour.shader: Shader;
 import gl3n.linalg: mat4;
+
 import yagg.widget;
+import yagg.placeholder;
 
 class GUI
 {
@@ -111,4 +114,24 @@ public:
         program_.remove();
     }
 
+    static void processMouseInput(int button, bool pressed, int x, int y)
+    {
+
+        double xx = x/cast(double) GUI.width;
+        double yy = 1 - y/cast(double) GUI.height;
+
+        bool pointIn(Placeholder ph) const {
+            return (ph.x < xx && ph.x + ph.width > xx) &&
+                   (ph.y < yy && ph.y + ph.height > yy);
+        }
+
+        foreach_reverse(w; instance_.widgets)
+        {
+            if(pointIn(w.placeholder))
+            {
+                if(pressed) w.onClick();
+                break;
+            }
+        }
+    }
 }
