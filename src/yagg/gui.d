@@ -1,5 +1,6 @@
 module yagg.gui;
 
+import std.algorithm: remove;
 import std.exception: enforce;
 import std.stdio;
 
@@ -125,10 +126,12 @@ public:
                    (ph.y < yy && ph.y + ph.height > yy);
         }
 
-        foreach_reverse(w; instance_.widgets)
+        foreach_reverse(i, w; instance_.widgets)
         {
             if(pointIn(w.placeholder))
             {
+                instance_.widgets = remove(instance_.widgets, i);
+                instance_.widgets ~= w;
                 if(pressed) w.onClick();
                 break;
             }

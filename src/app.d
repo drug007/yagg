@@ -18,43 +18,45 @@ void main(string[] args)
     auto gui = GUI.create(width, height);
     scope(exit) gui.close();
 
-    auto btn = new Button();
-    btn.placeholder = new Placeholder(.3, 0.1, .25, .1); // x, y, width, heigth
-    btn.build();
-    //btn.caption = "Test Button";
-    btn.onClick = delegate ()
+    auto btnOne = new Button();
+    btnOne.placeholder = new Placeholder(.3, 0.1, .55, .1); // x, y, width, heigth
+    btnOne.caption = "Test Button1";
+    btnOne.update();
+    btnOne.onClick = delegate ()
     {
-        writeln("Test Button1 clicked");
+        static int count;
+        btnOne.caption = format("Test Button1 is pressed %d time(s).", count++);
+        btnOne.update();
     };
 
-    gui.addWidget(btn);
+    gui.addWidget(btnOne);
 
-    btn = new Button();
-    btn.placeholder = new Placeholder(.5, 0.15, .25, .1); // x, y, width, heigth
-    btn.build();
-    //btn.caption = "Test Button";
-    btn.onClick = delegate ()
+    auto btnTwo = new Button();
+    btnTwo.placeholder = new Placeholder(.2, 0.15, .25, .1); // x, y, width, heigth
+    btnTwo.caption = "Test Button2";
+    btnTwo.update();
+    btnTwo.onClick = delegate ()
     {
         writeln("Test Button2 clicked");
     };
 
-    gui.addWidget(btn);
+    gui.addWidget(btnTwo);
 
-    btn = new Button();
-    btn.placeholder = new Placeholder(.2, 0.8, .25, .1); // x, y, width, heigth
-    btn.build();
-    ////btn.caption = "Test Button";
-    btn.onClick = ()
+    auto btnThree = new Button();
+    btnThree.placeholder = new Placeholder(.2, 0.8, .25, .1); // x, y, width, heigth
+    btnThree.caption = "Test Button3";
+    btnThree.update();
+    btnThree.onClick = ()
     {
         writeln("Test Button3 clicked");
-        btn.placeholder.x += uniform(-10, 10)/30.;
-        with(btn.placeholder) if (x > 1 - width) x = 1 - width;
-        with(btn.placeholder) if (x < width) x = width;
+        btnThree.placeholder.x += uniform(-10, 10)/30.;
+        with(btnThree.placeholder) if (x > 1 - width) x = 1 - width;
+        with(btnThree.placeholder) if (x < width) x = width;
 
-        btn.build();
+        btnThree.update();
     };
 
-    gui.addWidget(btn);
+    gui.addWidget(btnThree);
 
     app.drawHandler = ()
     {

@@ -18,5 +18,6 @@ public:
 
     Placeholder placeholder;
     bool visible;
+    string caption;
     abstract void draw();
 }

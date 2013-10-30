@@ -23,8 +23,6 @@ class Button: Widget
     Buffer texcoords;
     Texture2D texture;
 
-    string caption;
-
     this()
     {
         visible = true;
@@ -56,14 +54,14 @@ class Button: Widget
         vao.unbind();
     }
 
-    void build()
+    void update()
     {
         close();
         texture = new Texture2D();
 
         auto width = (GUI.width*placeholder.width).to!int;
         auto height = (GUI.height*placeholder.height).to!int;
-        auto data = Backend.createSubstrate(width, height);
+        auto data = Backend.createSubstrate(width, height, caption);
 
         texture.set_data(data, GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE);
 
@@ -87,7 +85,7 @@ class Button: Widget
         dummy[7] = placeholder.y + placeholder.height;
 
         vertices.set_data(dummy);
-        dummy = [0, 0, 1, 0, 0, 1, 1, 1];
+        dummy = [0, 1, 1, 1, 0, 0, 1, 0];
         texcoords.set_data(dummy);
 
         auto gui = GUI.getInstance();
