@@ -7,7 +7,7 @@ import glamour.vbo: Buffer;
 import glamour.texture: Texture2D;
 import derelict.sdl2.sdl: SDL_PixelFormat, SDL_Color, SDL_CreateRGBSurface, SDL_FillRect, SDL_MapRGBA, SDL_FreeSurface;
 import derelict.opengl3.gl3: glDrawArrays, glTexParameteri, glPixelStorei, glEnable, glDisable, glBlendFunc,
-    GL_BLEND, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_TRIANGLE_STRIP, GL_RGBA, GL_UNSIGNED_BYTE, GL_TEXTURE_2D,
+    GL_BLEND, GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_TRIANGLE_STRIP, GL_RGBA, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, GL_UNSIGNED_BYTE, GL_TEXTURE_2D,
     GL_TEXTURE_MIN_FILTER, GL_LINEAR, GL_TEXTURE_MAG_FILTER, GL_TEXTURE_WRAP_S, GL_REPEAT, GL_TEXTURE_WRAP_T, GL_UNPACK_ALIGNMENT, GL_FLOAT;
 
 import yagg.gui: GUI;
@@ -63,7 +63,7 @@ class Button: Widget
         auto height = (GUI.height*placeholder.height).to!int;
         auto data = Backend.createSubstrate(width, height, caption);
 
-        texture.set_data(data, GL_RGBA, width, height, GL_RGBA, GL_UNSIGNED_BYTE);
+        texture.set_data(data, GL_RGBA, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
