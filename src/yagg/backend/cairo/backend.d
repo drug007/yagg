@@ -8,18 +8,20 @@ import cairo.c.cairo;
 
 import yagg.gui: GUI;
 
-struct RGBA {
-    ubyte r, g, b, a;
-}
-
 auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, double height)
 {
     /* a custom shape that could be wrapped in a function */
-    double aspect        = width / height;    /* aspect ratio */
-    double corner_radius = height / 10.0;   /* and corner curvature radius */
+    double corner_radius = height / 2.50;   /* corner curvature radius */
 
-    double radius = corner_radius / aspect;
+    double radius = corner_radius;
     double degrees = PI / 180.0;
+
+    double border_width = 5;
+    x += border_width / 2;
+    y += border_width / 2;
+
+    width -= border_width;
+    height -= border_width;
 
     cairo_new_sub_path (cr);
     cairo_arc (cr, x + width - radius, y + radius, radius, -90 * degrees, 0 * degrees);
@@ -30,8 +32,8 @@ auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, doubl
 
     cairo_set_source_rgb (cr, 0.5, 0.5, 1);
     cairo_fill_preserve (cr);
-    cairo_set_source_rgba (cr, 0.5, 0, 0, 0.5);
-    cairo_set_line_width (cr, 10.0);
+    cairo_set_source_rgb (cr, .5, 0, 0.);
+    cairo_set_line_width (cr, border_width);
     cairo_stroke (cr);
 }
 
