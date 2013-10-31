@@ -14,7 +14,7 @@ import yagg.gui: GUI;
 import yagg.widget: Widget;
 import yagg.placeholder: Placeholder;
 //import yagg.backend.simple.backend: Backend;
-import yagg.backend.cairo.backend: Backend;
+import yagg.backend.cairo.lookandfeel: LookAndFeel;
 
 class Button: Widget
 {
@@ -61,7 +61,7 @@ class Button: Widget
 
         auto width = (GUI.width*placeholder.width).to!int;
         auto height = (GUI.height*placeholder.height).to!int;
-        auto data = Backend.createSubstrate(width, height, caption);
+        auto data = LookAndFeel.createButtonBackground(width, height, caption);
 
         texture.set_data(data, GL_RGBA, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV);
 

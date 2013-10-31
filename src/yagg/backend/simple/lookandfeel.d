@@ -1,4 +1,4 @@
-module yagg.backend.simple.backend;
+module yagg.backend.simple.lookandfeel;
 
 import yagg.backend.simple.bitmap: Image;
 import yagg.backend.simple.line: drawLine;
@@ -34,7 +34,7 @@ class Surface
     }
 }
 
-class Backend
+class LookAndFeel
 {
     /// create surface with GL_RGBA compatible format
     static Surface createRGBASurface(int width, int height)
@@ -42,7 +42,7 @@ class Backend
         return new Surface(width, height);
     }
 
-    static RGBA[] createSubstrate(int width, int height)
+    static RGBA[] createButtonBackground(int width, int height)
     {
         auto surface = createRGBASurface(width, height);
         surface.color = RGBA(255, 0, 0, 255);

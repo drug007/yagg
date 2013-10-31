@@ -1,4 +1,4 @@
-module yagg.backend.cairo.backend;
+module yagg.backend.cairo.lookandfeel;
 
 import std.math: PI;
 import std.conv: to;
@@ -60,10 +60,10 @@ void drawText(cairo_t* cr, string text, int x, int y)
     cairo_stroke (cr);
 }
 
-class Backend
+class LookAndFeel
 {
 
-    static ubyte[] createSubstrate(int width, int height, string caption)
+    static ubyte[] createButtonBackground(int width, int height, string caption)
     {
         // allocate memory for data
         auto stride = cairo_format_stride_for_width(cairo_format_t.CAIRO_FORMAT_ARGB32, width);
