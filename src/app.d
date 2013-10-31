@@ -75,6 +75,12 @@ void main(string[] args)
         GUI.processMouseInput(button, pressed, x, y);
     };
 
+    app.mouseMotionHandler = (int x, int y, bool right_button_pressed)
+    {
+        //writefln("button: %d, pressed: %s, x: %d, y: %d", 3, right_button_pressed, x, y);
+        GUI.processMouseInput(3, right_button_pressed, x, y);
+    };
+
     app.run();
     return;
 }

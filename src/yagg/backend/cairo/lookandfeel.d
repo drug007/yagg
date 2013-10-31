@@ -7,6 +7,7 @@ import std.string: toStringz;
 import cairo.c.cairo;
 
 import yagg.gui: GUI;
+import yagg.button: Button;
 
 struct RGBA
 {
@@ -30,7 +31,7 @@ struct RGBA
     }
 }
 
-auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, double height)
+auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, double height, bool isMouseOver)
 {
     /* a custom shape that could be wrapped in a function */
     double corner_radius = height / 2.50;   /* corner curvature radius */
@@ -41,7 +42,15 @@ auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, doubl
     double border_width = 5;
     RGBA background_color;
     background_color.rgba = 0xffeeeeff;
-    RGBA border_color =  RGBA(128, 0, 0, 1);
+    RGBA border_color;
+    border_color.rgba =  0xff000000;
+
+    if(isMouseOver)
+    {
+        background_color.r /= 1.2;
+        background_color.g /= 1.2;
+        background_color.b /= 1.2;
+    }
 
 
     x += border_width / 2;
@@ -104,8 +113,10 @@ void drawText(cairo_t* cr, string text, int x, int y)
 class LookAndFeel
 {
 
-    static ubyte[] createButtonBackground(int width, int height, string caption)
+    static ubyte[] createButtonBackground(Button btn)
     {
+        auto width = (GUI.width*btn.placeholder.width).to!int;
+        auto height = (GUI.height*btn.placeholder.height).to!int;
         // allocate memory for data
         auto stride = cairo_format_stride_for_width(cairo_format_t.CAIRO_FORMAT_ARGB32, width);
         auto length = stride * height;
@@ -115,9 +126,9 @@ class LookAndFeel
         // create surface and draw on it
         auto surface = cairo_image_surface_create_for_data (data.ptr, cairo_format_t.CAIRO_FORMAT_ARGB32, width, height, stride);
         auto cr = cairo_create (surface);
-        createRoundedRectangle(cr, 0, 0, width, height);
+        createRoundedRectangle(cr, 0, 0, width, height, btn.isMouseOver);
 
-        drawText(cr, caption, width/2, height/2);
+        drawText(cr, btn.caption, width/2, height/2);
 
         return data;
     }

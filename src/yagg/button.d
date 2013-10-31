@@ -54,15 +54,15 @@ class Button: Widget
         vao.unbind();
     }
 
-    void update()
+    override void update()
     {
         close();
         texture = new Texture2D();
 
+        auto data = LookAndFeel.createButtonBackground(this);
+
         auto width = (GUI.width*placeholder.width).to!int;
         auto height = (GUI.height*placeholder.height).to!int;
-        auto data = LookAndFeel.createButtonBackground(width, height, caption);
-
         texture.set_data(data, GL_RGBA, width, height, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV);
 
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

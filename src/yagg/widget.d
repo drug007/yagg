@@ -11,6 +11,8 @@ private:
 
 public:
 
+    bool isMouseOver = false;
+
     alias void delegate() OnClick;
 
     @property onClick(OnClick handler) { on_click_ = handler; }
@@ -20,4 +22,5 @@ public:
     bool visible;
     string caption;
     abstract void draw();
+    abstract void update();
 }

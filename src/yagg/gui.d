@@ -126,13 +126,30 @@ public:
                    (ph.y < yy && ph.y + ph.height > yy);
         }
 
+        // algo is very simple - just switch isMouseOver off for every widget
+        foreach(w; instance_.widgets)
+        {
+            if(w.isMouseOver)
+            {
+                w.isMouseOver = false;
+                w.update();
+            }
+        }
+
+        // now find the topmost widget and switch its isMouseOver on
         foreach_reverse(i, w; instance_.widgets)
         {
+
             if(pointIn(w.placeholder))
             {
-                instance_.widgets = remove(instance_.widgets, i);
-                instance_.widgets ~= w;
-                if(pressed) w.onClick();
+                w.isMouseOver = true;
+                w.update();
+                if(pressed)
+                {
+                    instance_.widgets = remove(instance_.widgets, i);
+                    instance_.widgets ~= w;
+                    w.onClick();
+                }
                 break;
             }
         }
