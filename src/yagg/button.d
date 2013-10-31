@@ -23,6 +23,8 @@ class Button: Widget
     Buffer texcoords;
     Texture2D texture;
 
+    bool isPressed = false;
+
     this()
     {
         visible = true;

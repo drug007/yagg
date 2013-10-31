@@ -9,6 +9,7 @@ import glamour.shader: Shader;
 import gl3n.linalg: mat4;
 
 import yagg.widget;
+import yagg.button;
 import yagg.placeholder;
 
 class GUI
@@ -137,20 +138,51 @@ public:
         }
 
         // now find the topmost widget and switch its isMouseOver on
-        foreach_reverse(i, w; instance_.widgets)
+        foreach_reverse(i, w; instance_.widgets.dup)
         {
 
             if(pointIn(w.placeholder))
             {
                 w.isMouseOver = true;
                 w.update();
-                if(pressed)
+                if(button == 1 && pressed)
                 {
                     instance_.widgets = remove(instance_.widgets, i);
                     instance_.widgets ~= w;
+                    Button btn = cast(Button) w;
+                    if(btn !is null)
+                    {
+                        btn.isPressed = true;
+                        w.update();
+                    }
                     w.onClick();
                 }
+                else if ((button == 1 && !pressed))
+                {
+                    Button btn = cast(Button) w;
+                    if(btn !is null)
+                    {
+                        if (btn.isPressed)
+                        {
+                            btn.isPressed = false;
+                            btn.update();
+                        }
+                    }
+                }
                 break;
+            }
+            else
+            {
+                // if mouse is not over button then button released
+                Button btn = cast(Button) w;
+                if(btn !is null)
+                {
+                    if (btn.isPressed)
+                    {
+                        btn.isPressed = false;
+                        btn.update();
+                    }
+                }
             }
         }
     }

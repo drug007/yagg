@@ -13,7 +13,10 @@ struct RGBA
 {
     union
     {
-        ubyte r, g, b, a;
+        struct
+        {
+            ubyte a, b, g, r;
+        }
         uint rgba;
     }
 
@@ -31,9 +34,8 @@ struct RGBA
     }
 }
 
-auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, double height, bool isMouseOver)
+auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, double height, bool isMouseOver, bool isPressed)
 {
-    /* a custom shape that could be wrapped in a function */
     double corner_radius = height / 2.50;   /* corner curvature radius */
 
     double radius = corner_radius;
@@ -41,17 +43,28 @@ auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, doubl
 
     double border_width = 5;
     RGBA background_color;
-    background_color.rgba = 0xffeeeeff;
+    background_color.rgba = 0x87cefaff;
     RGBA border_color;
-    border_color.rgba =  0xff000000;
-
-    if(isMouseOver)
+    border_color.rgba =  0x87cefaff;
+    with(border_color)
     {
-        background_color.r /= 1.2;
-        background_color.g /= 1.2;
-        background_color.b /= 1.2;
+        r *= 0.8;
+        g *= 0.8;
+        b *= 0.8;
+        a *= 0.8;
     }
 
+    double factor;
+    if(isMouseOver || isPressed)
+    {
+        factor = isPressed ? 1.2 : 1.1;
+        double dummy = (background_color.r * factor);
+        background_color.r = dummy > 255 ? 255 : dummy.to!ubyte;
+        dummy = (background_color.g * factor);
+        background_color.g = dummy > 255 ? 255 : dummy.to!ubyte;
+        dummy = (background_color.b * factor);
+        background_color.b = dummy > 255 ? 255 : dummy.to!ubyte;
+    }
 
     x += border_width / 2;
     y += border_width / 2;
@@ -73,14 +86,11 @@ auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, doubl
 
     double grad_x = width/2;
     double grad_y = height/2;
-    //auto pat = cairo_pattern_create_radial (grad_x, grad_y, 5,
-    //                                        grad_x, grad_y, height/2);
     auto pat = cairo_pattern_create_linear (0, 0,
                                             0, height);
     cairo_pattern_add_color_stop_rgba (pat, 0, background_color.r*1.02/255, background_color.g*1.02/255, background_color.b*1.02/255, background_color.a/255);
     cairo_pattern_add_color_stop_rgba (pat, 1, background_color.r*0.575/255, background_color.g*0.575/255, background_color.b*0.575/255, background_color.a/255);
     cairo_set_source (cr, pat);
-    //cairo_arc (cr, 128.0, 128.0, 76.8, 0, 2 * PI);
     cairo_fill (cr);
     cairo_pattern_destroy (pat);
 
@@ -101,8 +111,6 @@ void drawText(cairo_t* cr, string text, int x, int y)
 
     cairo_show_text (cr, text_zero);
 
-    //cairo_move_to (cr, 0.0, 100.0);
-    //cairo_text_path (cr, "void");
     cairo_set_source_rgb (cr, 0.5, 0.5, 1);
     cairo_fill_preserve (cr);
     cairo_set_source_rgb (cr, 0, 0, 0);
@@ -126,7 +134,7 @@ class LookAndFeel
         // create surface and draw on it
         auto surface = cairo_image_surface_create_for_data (data.ptr, cairo_format_t.CAIRO_FORMAT_ARGB32, width, height, stride);
         auto cr = cairo_create (surface);
-        createRoundedRectangle(cr, 0, 0, width, height, btn.isMouseOver);
+        createRoundedRectangle(cr, 0, 0, width, height, btn.isMouseOver, btn.isPressed);
 
         drawText(cr, btn.caption, width/2, height/2);
 

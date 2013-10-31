@@ -14,6 +14,8 @@ protected:
     SDL_Window* sdl_window_;
     SDL_GLContext gl_context_;
 
+    bool is_running_ = true;
+
     int mouse_x_, mouse_y_;
 
     MouseMotionHandler mouse_motion_handler_;
@@ -108,22 +110,25 @@ public:
         }
     }
 
+    void exit()
+    {
+        is_running_ = false;
+    }
+
     bool processEvents()
     {
-        bool is_running = true;
         // handle all SDL events that we might've received in this loop iteration
         SDL_Event event;
         while (SDL_PollEvent(&event)) {
             switch(event.type){
                 // user has clicked on the window's close button
                 case SDL_QUIT:
-                    is_running = false;
+                    is_running_ = false;
                     break;
                 case SDL_KEYUP:
                     switch (event.key.keysym.sym) {
                         // if user presses ESCAPE key - stop running
                         case SDLK_ESCAPE:
-                            is_running = false;
                             break;
                         default:{}
                     }
@@ -161,6 +166,6 @@ public:
                     break;
             }
         }
-        return is_running;
+        return is_running_;
     }
 }

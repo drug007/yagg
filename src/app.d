@@ -48,12 +48,7 @@ void main(string[] args)
     btnThree.update();
     btnThree.onClick = ()
     {
-        writeln("Test Button3 clicked");
-        btnThree.placeholder.x += uniform(-10, 10)/30.;
-        with(btnThree.placeholder) if (x > 1 - width) x = 1 - width;
-        with(btnThree.placeholder) if (x < width) x = width;
-
-        btnThree.update();
+        app.exit();
     };
 
     gui.addWidget(btnThree);
