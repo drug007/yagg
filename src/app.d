@@ -43,8 +43,8 @@ void main(string[] args)
     gui.addWidget(btnTwo);
 
     auto btnThree = new Button();
-    btnThree.placeholder = new Placeholder(.2, 0.8, .25, .1); // x, y, width, heigth
-    btnThree.caption = "Test Button3";
+    btnThree.placeholder = new Placeholder(.2, 0.8, .125, .045); // x, y, width, heigth
+    btnThree.caption = "Quit";
     btnThree.update();
     btnThree.onClick = ()
     {

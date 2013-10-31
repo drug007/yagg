@@ -8,6 +8,28 @@ import cairo.c.cairo;
 
 import yagg.gui: GUI;
 
+struct RGBA
+{
+    union
+    {
+        ubyte r, g, b, a;
+        uint rgba;
+    }
+
+    this(uint rgba)
+    {
+        this.rgba = rgba;
+    }
+
+    this(ubyte r, ubyte g, ubyte b, ubyte a)
+    {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+    }
+}
+
 auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, double height)
 {
     /* a custom shape that could be wrapped in a function */
@@ -17,6 +39,11 @@ auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, doubl
     double degrees = PI / 180.0;
 
     double border_width = 5;
+    RGBA background_color;
+    background_color.rgba = 0xffeeeeff;
+    RGBA border_color =  RGBA(128, 0, 0, 1);
+
+
     x += border_width / 2;
     y += border_width / 2;
 
@@ -30,10 +57,24 @@ auto createRoundedRectangle(cairo_t* cr, double x, double y, double width, doubl
     cairo_arc (cr, x + radius, y + radius, radius, 180 * degrees, 270 * degrees);
     cairo_close_path (cr);
 
-    cairo_set_source_rgb (cr, 0.5, 0.5, 1);
+    cairo_set_source_rgb (cr, background_color.r, background_color.g, background_color.b);
     cairo_fill_preserve (cr);
-    cairo_set_source_rgb (cr, .5, 0, 0.);
+    cairo_set_source_rgb (cr, border_color.r, border_color.g, border_color.b);
     cairo_set_line_width (cr, border_width);
+
+    double grad_x = width/2;
+    double grad_y = height/2;
+    //auto pat = cairo_pattern_create_radial (grad_x, grad_y, 5,
+    //                                        grad_x, grad_y, height/2);
+    auto pat = cairo_pattern_create_linear (0, 0,
+                                            0, height);
+    cairo_pattern_add_color_stop_rgba (pat, 0, background_color.r*1.02/255, background_color.g*1.02/255, background_color.b*1.02/255, background_color.a/255);
+    cairo_pattern_add_color_stop_rgba (pat, 1, background_color.r*0.575/255, background_color.g*0.575/255, background_color.b*0.575/255, background_color.a/255);
+    cairo_set_source (cr, pat);
+    //cairo_arc (cr, 128.0, 128.0, 76.8, 0, 2 * PI);
+    cairo_fill (cr);
+    cairo_pattern_destroy (pat);
+
     cairo_stroke (cr);
 }
 
@@ -41,13 +82,13 @@ void drawText(cairo_t* cr, string text, int x, int y)
 {
     cairo_set_source_rgb(cr, 0.1, 0.1, 0.1);
     cairo_select_font_face (cr, "Sans", cairo_font_slant_t.CAIRO_FONT_SLANT_NORMAL,
-                                        cairo_font_weight_t.CAIRO_FONT_WEIGHT_BOLD);
+                                        cairo_font_weight_t.CAIRO_FONT_WEIGHT_NORMAL);
     cairo_set_font_size (cr, 14);
 
     auto text_zero = text.toStringz;
     cairo_text_extents_t extents;
     cairo_text_extents(cr, text_zero, &extents);
-    cairo_move_to(cr, x - extents.width/2, y);
+    cairo_move_to(cr, x - extents.width/2, y + extents.height/4);
 
     cairo_show_text (cr, text_zero);
 
